@@ -98,6 +98,7 @@ routes.post('/datos', (req, res) => {
 
 });
 
+
 //eliminar
 routes.get('/eliminar/:id', async(req, res) => {
     const { id } = req.params;
