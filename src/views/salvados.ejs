@@ -1,0 +1,31 @@
+<%- include('partials/_header') %>
+
+    <header class="container-fluid " style="margin-top: 100px;">
+        <div align="center">
+            <div class="card w-50">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-bolder">Felicitaciones sus datos han sido guardados exitosamente</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Descripsion del archivo subidos</h5>
+                    <p class="card-text text-primary">Tipo de clase:
+                        <%= datos[0].tipo  %>
+                    </p>
+                    <p class="card-text text-primary">Nombre del archivo:
+                        <%= datos[0].nombre %>
+                    </p>
+                    <p class="card-text text-primary">Descripsion del archivo:
+                        <%= datos[0].descripsion %>
+                    </p>
+                    <p class="card-text text-primary">Archivo subido:
+                        <%= datos[0].nombreArchivo %>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <footer style="margin-bottom: 285px;">
+
+    </footer>
+    <%- include('partials/footer') %>

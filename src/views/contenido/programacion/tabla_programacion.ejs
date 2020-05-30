@@ -1,0 +1,53 @@
+<div>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped">
+                <thead>
+                    <th scope="col">Archivos</th>
+                </thead>
+                <tbody>
+                    <p class="d-none" id="longitud">
+                        <%= datos.length %>
+                    </p>
+                    <% for( let index = 0; index < datos.length; index++ ) { %>
+                        <tr>
+                            <th scope="row">#
+                                <%= index %>
+                            </th>
+                            <td>
+                                <%= datos[index].nombre %>
+                            </td>
+                            <td class="text-center">
+
+                                <button class="btn btn-outline-secondary" id="valor<%= index %>">Ver</button><br><br>
+                                <form action="/eliminar/<%= datos[index]._id %> " method="GET">
+                                    <input type="submit" class="btn btn-outline-danger" value="Eliminar">
+                                </form>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-8">
+            <% for( let index = 0; index < datos.length; index++ ) { %>
+                <div class="cla" id="key<%= index%>">
+                    <div id="#key1<%= index %>">
+                        <div class="card-header">
+                            <h5><span class="font-weight-bold text-secondary">Nombre de Clase: </span> <span class="text-capitalize text-success font-weight-bold"><%= datos[index].tipo %> </span></h5>
+                        </div>
+                        <div class="card-body">
+                            <h5><span class="font-weight-bolder text-secondary">Nombre del archivo: </span> <span class="text-success font-weight-bolder"><%=datos[index].nombre%></span></h5>
+                            <br>
+                            <p><span class="font-weight-normal text-secondary">Descripsión: </span> <span class="text-info font-weight-bolder"><ins><%= datos[index].descripsion %></ins> </span></p>
+                        </div>
+                        <div class="card-footer">
+                            <embed src="upload/<%= datos[index].nombreArchivo %>" class="w-100" height="1000px" />
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+    </div>
+</div>

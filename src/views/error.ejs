@@ -1,0 +1,23 @@
+<%- include('partials/_header') %>
+
+    <header class="container-fluid align-content-center " align="center" style="margin-top:100px ;">
+        <div align="center">
+            <div class="card w-50 ">
+                <div class="card-body">
+                    <h5 class="card-title">Archivo no soportado</h5>
+                    <p class="card-text">Lo sentemios el tipo de formato no es soportado</p>
+                    <p class="font-weight-bolder">Nombre del archivo subido: <span class="text-danger"><%= nombre %> </span></p>
+                    <br>
+                    <p class="font-weight-bold">Formatos Soportados <span class="badge badge-pill badge-primary">PDF</span></p>
+                </div>
+                <div class="card-footer">
+                    <a href="/formulario" class="btn  btn-outline-warning">Regresar a formulario.</a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <footer style="margin-bottom: 285px;">
+
+    </footer>
+    <%- include('partials/footer') %>
