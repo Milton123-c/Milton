@@ -43,7 +43,8 @@
                             <p><span class="font-weight-normal text-secondary">Descripsión: </span> <span class="text-info font-weight-bolder"><ins><%= datos[index].descripsion %></ins> </span></p>
                         </div>
                         <div class="card-footer">
-                            <embed src="upload/<%= datos[index].nombreArchivo %>" class="w-100" height="1000px" />
+
+                            <iframe class="w-100" height="1000px" src="upload/<%= datos[index].nombreArchivo %>" frameborder="0"></iframe>
                         </div>
                     </div>
                 </div>
