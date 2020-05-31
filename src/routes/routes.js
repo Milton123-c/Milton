@@ -4,110 +4,140 @@ const { randomName } = require('../random/random');
 const fs = require('fs-extra');
 const path = require('path');
 
+const direccion = path.join(__dirname, '../models/datos.json');
+const datas = require('../models/datos.json');
+
 const routes = express.Router();
 
-//plantilla de inicio
+//page index
 routes.get('/', (req, res) => {
+
     res.render('index');
+
 });
 
-//mantenimiento
-routes.get('/mantenimiento', async(req, res) => {
+//pagina mantenimiento
+routes.get('/mantenimiento', (req, res) => {
 
-    const datos = await archivos.find({
-        tipo: "mantenimiento"
-    });
+    var datos = [];
 
-    res.render('mantenimiento', {
-        datos
-    });
+    for (let i = 0; i < datas.length; i++) {
+        if (datas[i].tipo == "mantenimiento") {
+            datos.push(datas[i]);
+        }
+    }
+
+    res.render('mantenimiento', { datos });
+
 });
 
-//programacion
-routes.get('/programacion', async(req, res) => {
-    const datos = await archivos.find({
-        tipo: 'programacion'
-    });
+//pagina programacion
+routes.get('/programacion', (req, res) => {
+
+    var datos = [];
+
+    for (let i = 0; i < datas.length; i++) {
+        if (datas[i].tipo == "programacion") {
+            datos.push(datas[i]);
+        }
+    }
+
     res.render('programacion', { datos });
 });
 
-//entorno
-routes.get('/entorno', async(req, res) => {
-    const datos = await archivos.find({ tipo: "entorno" });
-    res.render('entorno', {
-        datos
-    });
-});;
+//pagina entorno
+routes.get('/entorno', (req, res) => {
 
-//tic
-routes.get('/tic', async(req, res) => {
-    const datos = await archivos.find({ tipo: 'tic' });
+    var datos = [];
+
+    for (let i = 0; i < datas.length; i++) {
+        if (datas[i].tipo == "entorno") {
+            datos.push(datas[i]);
+        }
+    }
+
+    res.render('entorno', { datos });
+});
+
+//pagina tic
+routes.get('/tic', (req, res) => {
+
+    var datos = [];
+
+    for (let i = 0; i < datas.length; i++) {
+        if (datas[i].tipo == "tic") {
+            datos.push(datas[i]);
+        }
+    }
+
     res.render('tic', { datos });
 });
 
-//formulario
+//formulario 
 routes.get('/formulario', (req, res) => {
     res.render('form');
-})
+});
 
-//obteniendo datos 
+
+//subiendo archivos
 routes.post('/datos', (req, res) => {
+    const saveDate = async() => {
+        var nombreNuevo = randomName();
 
-    //configuracion para subir archivos
-    const saveFile = async() => {
-        const nombreArchivo1 = randomName();
-        const datos = await archivos.find({ nombreArchivo: nombreArchivo1 });
+        const nombreOriginal = req.file.originalname;
+        const FileTempPath = req.file.path;
+        const ext = path.extname(nombreOriginal);
+        const targetPath = path.resolve(`src/public/upload/${nombreNuevo}${ext}`);
 
-        if (datos.length > 0) {
-            saveFile();
+        //convalidar nombre
+        var bandera = false;
+        for (let i = 0; i < datas.length; i++) {
+            if (nombreNuevo == datas[i].nombreArchivo) {
+                bandera = true;
+                break;
+            } else {
+                bandera = false;
+            }
+        }
+        if (bandera) {
+            saveDate();
         } else {
-
-            //cambiando de direccion el archivo
-            const fileTempPath = req.file.path;
-            const ext = path.extname(req.file.originalname).toLowerCase();
-            const targetPath = path.resolve(`src/public/upload/${nombreArchivo1}${ext}`);
-
-            //convalidando extension
-            if (ext == '.pdf') {
-                await fs.rename(fileTempPath, targetPath);
+            if (ext == ".pdf" || ext == ".png") {
+                await fs.rename(FileTempPath, targetPath);
                 const { tipo, nombre, descripsion } = req.body;
-                const data = new archivos({
+                const nuevoDatos = {
                     tipo,
                     nombre,
                     descripsion,
-                    nombreArchivo: nombreArchivo1 + ext
-                });
-                await data.save();
+                    nombreArchivo: nombreNuevo + ext
+                };
+                var dbjson = datas;
+                dbjson.push(nuevoDatos);
 
-                const datos = await archivos.find({ nombreArchivo: nombreArchivo1 + ext });
 
-                res.render('salvados', {
-                    datos
+                fs.writeJSON(direccion, dbjson, (err) => {
+                    if (err) return console.log(err)
+                    console.log("db modify");
                 });
+
+                var datos = [];
+                const buscar = nombreNuevo + ext;
+                for (let i = 0; i < datas.length; i++) {
+                    if (buscar == datas[i].nombreArchivo) {
+                        datos.push(datas[i]);
+                    }
+                }
+
+                res.render('salvados', { datos });
             } else {
-                await fs.unlink(fileTempPath);
-                res.render('error', {
-                    nombre: req.file.originalname
-                });
+                fs.unlink(FileTempPath);
+                const nombre = nombreOriginal;
+                res.render('error', { nombre });
             }
         }
 
     };
-    saveFile();
-
-});
-
-
-//eliminar
-routes.get('/eliminar/:id', async(req, res) => {
-    const { id } = req.params;
-    const { tipo, nombreArchivo } = await archivos.findById(id);
-
-    await fs.unlink(path.resolve(`src/public/upload/${nombreArchivo}`));
-
-    await archivos.remove({ _id: id });
-
-    res.redirect(`/${tipo}`);
+    saveDate();
 });
 
 module.exports = routes;

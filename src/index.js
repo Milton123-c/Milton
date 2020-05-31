@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const multer = require('multer');
 
 const app = express();
-require('./database');
+//require('./database');
 
 //importando rutas
 const routes = require('./routes/routes');
