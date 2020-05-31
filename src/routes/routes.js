@@ -18,7 +18,6 @@ routes.get('/mantenimiento', async(req, res) => {
         tipo: "mantenimiento"
     });
 
-
     res.render('mantenimiento', {
         datos
     });
@@ -37,7 +36,7 @@ routes.get('/entorno', async(req, res) => {
     const datos = await archivos.find({ tipo: "entorno" });
     res.render('entorno', {
         datos
-    })
+    });
 });;
 
 //tic
