@@ -43,7 +43,8 @@
                             <p><span class="font-weight-normal text-secondary">Descripsión: </span> <span class="text-info font-weight-bolder"><ins><%= datos[index].descripsion %></ins> </span></p>
                         </div>
                         <div class="card-footer">
-                            <iframe class="w-100" height="1000px" src="upload/<%= datos[index].nombreArchivo %>" frameborder="0"></iframe>
+
+                            <object data="upload/<%= datos[index].nombreArchivo %>" type="application/pdf" class="w-100" height="1000px"></object>
                         </div>
                     </div>
                 </div>
